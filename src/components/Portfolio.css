@@ -1,0 +1,320 @@
+.portfolio {
+  padding: 100px 2rem;
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  position: relative;
+}
+
+.portfolio .section-title h2 {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #111827;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.portfolio .section-title p {
+  font-size: 1.1rem;
+  color: #6B7280;
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.portfolio-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2.5rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.portfolio-item {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 2px solid rgba(59, 130, 246, 0.1);
+  position: relative;
+}
+
+.portfolio-item.completed {
+  border-color: rgba(34, 197, 94, 0.2);
+}
+
+.portfolio-item.in-progress {
+  border-color: rgba(251, 146, 60, 0.2);
+}
+
+.portfolio-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6, #3b82f6);
+  background-size: 200% 100%;
+  animation: gradientFlow 3s ease-in-out infinite;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.portfolio-item.completed::before {
+  background: linear-gradient(90deg, #22c55e, #10b981, #22c55e);
+}
+
+.portfolio-item.in-progress::before {
+  background: linear-gradient(90deg, #fb923c, #f59e0b, #fb923c);
+}
+
+.portfolio-item:hover::before {
+  opacity: 1;
+}
+
+.portfolio-item:hover {
+  transform: translateY(-12px) scale(1.02);
+  box-shadow: 0 25px 50px rgba(59, 130, 246, 0.2);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.portfolio-item.completed:hover {
+  box-shadow: 0 25px 50px rgba(34, 197, 94, 0.2);
+  border-color: rgba(34, 197, 94, 0.4);
+}
+
+.portfolio-item.in-progress:hover {
+  box-shadow: 0 25px 50px rgba(251, 146, 60, 0.2);
+  border-color: rgba(251, 146, 60, 0.4);
+}
+
+.portfolio-image {
+  width: 100%;
+  height: 220px;
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.portfolio-item.completed .portfolio-image {
+  background: linear-gradient(135deg, #22c55e 0%, #10b981 100%);
+}
+
+.portfolio-item.in-progress .portfolio-image {
+  background: linear-gradient(135deg, #fb923c 0%, #f59e0b 100%);
+}
+
+.project-icon {
+  font-size: 5rem;
+  z-index: 2;
+  position: relative;
+  animation: floatIcon 3s ease-in-out infinite;
+}
+
+@keyframes floatIcon {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.project-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px);
+  padding: 0.75rem 1rem;
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+}
+
+.portfolio-item:hover .project-overlay {
+  transform: translateY(0);
+}
+
+.project-category {
+  color: white;
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.portfolio-info {
+  padding: 1.75rem;
+}
+
+.portfolio-info h3 {
+  font-size: 1.25rem;
+  margin-bottom: 0.75rem;
+  color: #111827;
+  font-weight: 800;
+  line-height: 1.4;
+}
+
+.portfolio-info p {
+  color: #6B7280;
+  line-height: 1.7;
+  margin-bottom: 1.25rem;
+  font-size: 0.95rem;
+}
+
+.project-technologies {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tech-badge {
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  color: #1e40af;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  box-shadow: 0 2px 6px rgba(59, 130, 246, 0.15);
+  transition: all 0.3s ease;
+}
+
+.tech-badge:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+  background: linear-gradient(135deg, #bfdbfe 0%, #93c5fd 100%);
+}
+
+.status-badge {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  padding: 0.5rem 1rem;
+  border-radius: 25px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  z-index: 3;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  animation: statusPulse 2s ease-in-out infinite;
+}
+
+.status-badge.completed {
+  background: rgba(34, 197, 94, 0.95);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.status-badge.in-progress {
+  background: rgba(251, 146, 60, 0.95);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+@keyframes statusPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+  }
+}
+
+@keyframes gradientFlow {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .portfolio {
+    padding: 80px 1.5rem;
+  }
+
+  .portfolio .section-title h2 {
+    font-size: 2rem;
+  }
+
+  .portfolio-grid {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+
+  .portfolio-item {
+    border-radius: 16px;
+  }
+
+  .portfolio-image {
+    height: 200px;
+  }
+
+  .project-icon {
+    font-size: 4rem;
+  }
+
+  .portfolio-info {
+    padding: 1.5rem;
+  }
+
+  .portfolio-info h3 {
+    font-size: 1.15rem;
+  }
+
+  .portfolio-info p {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .portfolio {
+    padding: 60px 1rem;
+  }
+
+  .portfolio .section-title h2 {
+    font-size: 1.75rem;
+  }
+
+  .portfolio-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .portfolio-item {
+    border-radius: 14px;
+  }
+
+  .portfolio-image {
+    height: 180px;
+  }
+
+  .project-icon {
+    font-size: 3.5rem;
+  }
+
+  .portfolio-info {
+    padding: 1.25rem;
+  }
+
+  .portfolio-info h3 {
+    font-size: 1.1rem;
+  }
+
+  .portfolio-info p {
+    font-size: 0.85rem;
+  }
+
+  .tech-badge {
+    font-size: 0.7rem;
+    padding: 0.35rem 0.7rem;
+  }
+}
