@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -10,10 +10,14 @@ import Portfolio from './components/Portfolio';
 import Contact from './components/Contact';
 import AuthPage from './components/Auth/AuthPage';
 import ScrollToTop from './components/ScrollToTop';
+import Chat from './components/Chat';
 import './App.css';
+import './components/Chat.css';
 
 function App() {
-  const [showForm, setShowForm] = useState(false);
+  const [showChat, setShowChat] = useState(false);
+  const [unreadMessages, setUnreadMessages] = useState(0);
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -27,12 +31,26 @@ function App() {
     });
   };
 
+  // Efecto para detectar cambios en la conexión
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    // Lógica para manejar el envío del formulario
     console.log('Formulario enviado:', formData);
-    alert('¡Gracias! Te contactaremos en menos de 2 horas.');
-    setFormData({ name: '', email: '', project: '' });
-    setShowForm(false);
+    // Aquí podrías agregar la lógica para enviar el formulario a tu backend
+    setFormData({ name: '', email: '', project: '', message: '' });
   };
 
   return (
@@ -53,45 +71,42 @@ function App() {
         </main>
         <Footer />
 
-        {/* Botón Flotante para Contacto */}
-        <button className="floating-contact-btn" onClick={() => setShowForm(true)}>
-          💬 ¿Hablamos?
+        {/* Botón Flotante del Chat */}
+        <button 
+          className="floating-chat-btn" 
+          onClick={() => {
+            setShowChat(!showChat);
+            if (unreadMessages > 0) {
+              setUnreadMessages(0);
+            }
+          }}
+          aria-label="Abrir chat"
+        >
+          💬
+          {unreadMessages > 0 && (
+            <span className="notification-badge">
+              {unreadMessages > 9 ? '9+' : unreadMessages}
+            </span>
+          )}
         </button>
 
-        {/* Chat Flotante */}
-        {showForm && (
-          <div className="chat-container">
-            <div className="chat-window">
-              <div className="chat-header">
-                <div className="chat-avatar">🤖</div>
-                <div className="chat-info">
-                  <h4>Asistente Virtual</h4>
-                  <span>En línea</span>
-                </div>
-                <button className="close-btn" onClick={() => setShowForm(false)}>×</button>
-              </div>
-              <div className="chat-messages">
-                <div className="message bot">
-                  <div className="message-avatar">🤖</div>
-                  <div className="message-content">
-                    ¡Hola! Soy tu asistente virtual. ¿En qué puedo ayudarte con tu proyecto web?
-                  </div>
-                </div>
-              </div>
-              <form className="chat-input" onSubmit={handleSubmit}>
-                <input
-                  type="text"
-                  name="message"
-                  placeholder="Escribe tu mensaje..."
-                  value={formData.message || ''}
-                  onChange={(e) => setFormData({...formData, message: e.target.value})}
-                  required
-                />
-                <button type="submit" className="send-btn">📤</button>
-              </form>
-            </div>
-          </div>
+        {/* Componente de Chat */}
+        {showChat && (
+          <Chat 
+            onClose={() => setShowChat(false)}
+            onNewMessage={(isVisible) => {
+              if (!isVisible) {
+                setUnreadMessages(prev => prev + 1);
+              }
+            }}
+            isOnline={isOnline}
+          />
         )}
+
+        {/* Indicador de conexión */}
+        <div className={`connection-status ${isOnline ? 'online' : 'offline'}`}>
+          {isOnline ? 'En línea' : 'Sin conexión'}
+        </div>
       </div>
 
       
