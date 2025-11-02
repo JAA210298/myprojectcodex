@@ -72,23 +72,26 @@ function App() {
         <Footer />
 
         {/* Botón Flotante del Chat */}
-        <button 
-          className="floating-chat-btn" 
-          onClick={() => {
-            setShowChat(!showChat);
-            if (unreadMessages > 0) {
-              setUnreadMessages(0);
-            }
-          }}
-          aria-label="Abrir chat"
-        >
-          💬
-          {unreadMessages > 0 && (
-            <span className="notification-badge">
-              {unreadMessages > 9 ? '9+' : unreadMessages}
-            </span>
-          )}
-        </button>
+        <div className="floating-chat-container">
+          <button 
+            className="floating-chat-btn" 
+            onClick={() => {
+              setShowChat(!showChat);
+              if (unreadMessages > 0) {
+                setUnreadMessages(0);
+              }
+            }}
+            aria-label="Abrir chat"
+          >
+            <span className="chat-icon">💬</span>
+            <span className="chat-text">¿Hablemos?</span>
+            {unreadMessages > 0 && (
+              <span className="notification-badge">
+                {unreadMessages > 9 ? '9+' : unreadMessages}
+              </span>
+            )}
+          </button>
+        </div>
 
         {/* Componente de Chat */}
         {showChat && (
