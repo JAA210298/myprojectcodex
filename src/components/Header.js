@@ -28,86 +28,100 @@ const Header = () => {
     return location.pathname === path;
   };
 
-  return (
-    <header className={`professional-header ${scrolled ? 'scrolled' : ''}`}>
-      <div className="header-container">
-        {/* Logo con gradiente amarillo-naranja */}
-        <Link to="/" className="logo" onClick={closeMenu}>
-          <div className="logo-text">
-            <span className="logo-name">CodexB&J</span>
-            <span className="logo-tag">SOLUTIONS</span>
-          </div>
-        </Link>
-        
-        {/* Navegación minimalista */}
-        <nav className="navigation">
-          <ul className={`nav-menu ${menuOpen ? 'active' : ''}`}>
-            <li>
-              <Link 
-                to="/" 
-                className={`nav-link ${isActive('/') ? 'active' : ''}`}
-                onClick={closeMenu}
-              >
-                Inicio
-              </Link>
-            </li>
-            <li>
-              <Link 
-                to="/servicios" 
-                className={`nav-link ${isActive('/servicios') ? 'active' : ''}`}
-                onClick={closeMenu}
-              >
-                Servicios
-              </Link>
-            </li>
-            <li>
-              <Link 
-                to="/portafolio" 
-                className={`nav-link ${isActive('/portafolio') ? 'active' : ''}`}
-                onClick={closeMenu}
-              >
-                Proyectos
-              </Link>
-            </li>
-            <li>
-              <Link 
-                to="/nosotros" 
-                className={`nav-link ${isActive('/nosotros') ? 'active' : ''}`}
-                onClick={closeMenu}
-              >
-                Empresa
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/contacto"
-                className={`nav-link ${isActive('/contacto') ? 'active' : ''}`}
-                onClick={closeMenu}
-              >
-                Contacto
-              </Link>
-            </li>
-          </ul>
-        </nav>
+  // Cerrar menú al cambiar de ruta
+  useEffect(() => {
+    closeMenu();
+  }, [location.pathname]);
 
-        {/* Botón de Autenticación - Solo se muestra en desktop */}
-        <div className="header-actions">
-          <Link to="/auth" className="auth-button" onClick={closeMenu}>
-            <span className="auth-icon">🚀</span>
-            <span className="auth-text">Acceder</span>
+  // Deshabilitar scroll cuando el menú está abierto
+  useEffect(() => {
+    if (menuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [menuOpen]);
+
+  return (
+    <>
+      <header className={`professional-header ${scrolled ? 'scrolled' : ''}`}>
+        <div className="header-container">
+          {/* Logo */}
+          <Link to="/" className="logo" onClick={closeMenu}>
+            <div className="logo-text">
+              <span className="logo-name">CodexB&J</span>
+              <span className="logo-tag">SOLUTIONS</span>
+            </div>
           </Link>
           
-          <button 
-            className={`menu-toggle ${menuOpen ? 'active' : ''}`} 
-            onClick={toggleMenu}
-            aria-label="Menú"
-          >
-            <span></span>
-            <span></span>
-          </button>
+          {/* Menú de navegación */}
+          <nav className="navigation">
+            <div className={`nav-menu-container ${menuOpen ? 'active' : ''}`}>
+              <ul className="nav-menu">
+                {[
+                  { to: '/', text: 'Inicio' },
+                  { to: '/servicios', text: 'Servicios' },
+                  { to: '/portafolio', text: 'Proyectos' },
+                  { to: '/nosotros', text: 'Empresa' },
+                  { to: '/contacto', text: 'Contacto' }
+                ].map((item) => (
+                  <li key={item.to}>
+                    <Link 
+                      to={item.to} 
+                      className={`nav-link ${isActive(item.to) ? 'active' : ''}`}
+                      onClick={closeMenu}
+                    >
+                      {item.text}
+                    </Link>
+                  </li>
+                ))}
+                <li>
+                  <Link 
+                    to="/auth" 
+                    className="auth-button" 
+                    onClick={closeMenu}
+                  >
+                    <span className="auth-icon">🚀</span>
+                    <span className="auth-text">Iniciar Sesión</span>
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </nav>
+
+          {/* Botones de acción */}
+          <div className="header-actions">
+            <Link to="/auth" className="auth-button" onClick={closeMenu}>
+              <span className="auth-icon">🚀</span>
+              <span className="auth-text">Acceder</span>
+            </Link>
+            
+            <button 
+              className={`menu-toggle ${menuOpen ? 'active' : ''}`} 
+              onClick={toggleMenu}
+              aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
+            >
+              <span></span>
+              <span></span>
+              <span></span>
+            </button>
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
+      
+      {/* Overlay para cerrar el menú */}
+      {menuOpen && (
+        <div 
+          className="menu-overlay" 
+          onClick={closeMenu}
+          aria-hidden="true"
+        />
+      )}
+    </>
   );
 };
 

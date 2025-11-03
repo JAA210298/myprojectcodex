@@ -56,25 +56,72 @@ const Hero = () => {
       condition: "POR CADA CLIENTE QUE REFIERAS Y CONTRATE",
       image: image4,
       cta: "¡APLICA Y GANA AHORA!",
-      badge: "💰 GANA DINERO"
+      badge: " GANA DINERO"
     }
   ];
+
+  // Duplicar las imágenes para el efecto infinito
+  const extendedSlides = [...promotionalImages, ...promotionalImages, ...promotionalImages];
+  const slideCount = promotionalImages.length;
+  const totalSlides = extendedSlides.length;
+  const [transitionEnabled, setTransitionEnabled] = useState(true);
+  const [transitionSpeed, setTransitionSpeed] = useState(0.5);
 
   // Auto-avance del carrusel
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % promotionalImages.length);
+      setCurrentSlide(prev => {
+        // Si estamos en el último slide real, movemos sin animación al inicio del array duplicado
+        if (prev >= slideCount * 2 - 1) {
+          setTransitionEnabled(false);
+          return slideCount;
+        }
+        return prev + 1;
+      });
     }, 4000);
 
     return () => clearInterval(interval);
-  }, [promotionalImages.length]);
+  }, [slideCount]);
+
+  // Habilitar la transición después de saltar al inicio
+  useEffect(() => {
+    if (!transitionEnabled) {
+      const timer = setTimeout(() => {
+        setTransitionEnabled(true);
+      }, 50);
+      return () => clearTimeout(timer);
+    }
+  }, [transitionEnabled]);
 
   const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % promotionalImages.length);
+    setCurrentSlide(prev => {
+      if (prev >= slideCount * 2 - 1) {
+        setTransitionEnabled(false);
+        return slideCount;
+      }
+      return prev + 1;
+    });
   };
 
   const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + promotionalImages.length) % promotionalImages.length);
+    setCurrentSlide(prev => {
+      if (prev <= 0) {
+        setTransitionEnabled(false);
+        return slideCount - 1;
+      }
+      return prev - 1;
+    });
+  };
+
+  // Manejar el final del reset de la transición
+  const handleTransitionEnd = () => {
+    if (currentSlide >= slideCount * 2) {
+      setTransitionEnabled(false);
+      setCurrentSlide(slideCount);
+    } else if (currentSlide < 0) {
+      setTransitionEnabled(false);
+      setCurrentSlide(slideCount - 1);
+    }
   };
 
   const goToSlide = (index) => {
@@ -151,14 +198,19 @@ const Hero = () => {
               <div
                 className="carousel-track"
                 style={{
-                  transform: `translateX(-${currentSlide * 100}%)`,
-                  transition: 'transform 0.5s ease-in-out'
+                  transform: `translateX(-${currentSlide * (100 / slideCount)}%`,
+                  transition: transitionEnabled ? `transform ${transitionSpeed}s ease-in-out` : 'none',
+                  width: `${totalSlides * 100 / 3}%`
                 }}
+                onTransitionEnd={handleTransitionEnd}
               >
-                {promotionalImages.map((item, index) => (
+                {extendedSlides.map((item, index) => (
                   <div
-                    key={item.id}
+                    key={`${item.id}-${index}`}
                     className="carousel-slide"
+                    style={{
+                      width: `${100 / totalSlides * 3}%`
+                    }}
                   >
                     <div className="slide-image-container">
                       <img
