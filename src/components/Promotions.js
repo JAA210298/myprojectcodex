@@ -19,7 +19,7 @@ const Promotions = () => {
       image: image2,
       cta: "¡CONTRATA AHORA!",
       badge: "💫 OFERTA LIMITADA",
-      validUntil: "2024-12-31"
+      validUntil: "2025-12-31"
     },
     {
       id: 3,
@@ -31,7 +31,7 @@ const Promotions = () => {
       image: image4,
       cta: "OBTENER COMBO",
       badge: "🚀 MÁS VENDIDO",
-      validUntil: "2024-12-15"
+      validUntil: "2025-12-15"
     },
     {
       id: 4,
@@ -41,7 +41,7 @@ const Promotions = () => {
       image: image1,
       cta: "¡APLICA Y GANA AHORA!",
       badge: "💰 GANA DINERO",
-      validUntil: "2024-12-31"
+      validUntil: "2025-12-31"
     }
   ];
 

@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import './Header.css';
 
 const Header = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(window.innerWidth > 968); // Menú abierto solo en escritorio
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
 
@@ -17,7 +17,8 @@ const Header = () => {
   }, []);
 
   const toggleMenu = () => {
-    setMenuOpen(!menuOpen);
+    setMenuOpen(prev => !prev);
+    console.log('Menu toggled. New state:', !menuOpen);
   };
 
   const closeMenu = () => {
@@ -27,6 +28,23 @@ const Header = () => {
   const isActive = (path) => {
     return location.pathname === path;
   };
+
+  useEffect(() => {
+    const handleResize = () => {
+      // En móvil, el menú se cierra al cambiar el tamaño
+      if (window.innerWidth <= 968) {
+        setMenuOpen(false);
+      } else {
+        setMenuOpen(true);
+      }
+    };
+
+    // Configurar el estado inicial basado en el ancho de la pantalla
+    handleResize();
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   return (
     <header className={`professional-header ${scrolled ? 'scrolled' : ''}`}>
@@ -40,8 +58,8 @@ const Header = () => {
         </Link>
         
         {/* Navegación minimalista */}
-        <nav className="navigation">
-          <ul className={`nav-menu ${menuOpen ? 'active' : ''}`}>
+        <nav className={`navigation ${menuOpen ? 'active' : ''}`}>
+          <ul className="nav-menu">
             <li>
               <Link 
                 to="/" 
@@ -85,6 +103,15 @@ const Header = () => {
                 onClick={closeMenu}
               >
                 Contacto
+              </Link>
+            </li>
+            <li>
+              <Link 
+                to="/admin/dashboard" 
+                className={`nav-link ${isActive('/admin/dashboard') ? 'active' : ''}`}
+                onClick={closeMenu}
+              >
+                Admin
               </Link>
             </li>
           </ul>

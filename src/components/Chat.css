@@ -327,7 +327,7 @@
   100% { transform: scale(0.8); opacity: 0; }
 }
 
-/* Botón flotante */
+/* Botón flotante de chat */
 .floating-chat-btn {
   position: fixed;
   bottom: 30px;
@@ -335,27 +335,97 @@
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #6e8efb, #a777e3);
+  background: #6e8efb;
   color: white;
   border: none;
-  font-size: 24px;
+  font-size: 30px;
   cursor: pointer;
-  box-shadow: 0 5px 15px rgba(110, 142, 251, 0.4);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  z-index: 999;
+  transition: all 0.3s ease;
+  padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 999;
-  transition: all 0.3s;
-  animation: bounceIn 0.5s ease-out;
+  line-height: 1;
+  overflow: hidden;
+}
+
+/* Contenido del botón - solo el ícono de chat */
+.floating-chat-btn::after {
+  content: '💬';
+  display: block;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+}
+
+/* Ocultar cualquier otro contenido del botón */
+.floating-chat-btn > *:not(.notification-badge) {
+  display: none !important;
+}
+
+/* Asegurar que no haya contenido de texto */
+.floating-chat-btn span:not(.notification-badge) {
+  display: none !important;
 }
 
 .floating-chat-btn:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(110, 142, 251, 0.6);
+  background: #5d7de8;
+  box-shadow: 0 6px 20px rgba(110, 142, 251, 0.6);
 }
 
 .floating-chat-btn:active {
   transform: translateY(0);
+}
+
+/* Estilos para móviles */
+@media (max-width: 768px) {
+  .floating-chat-btn {
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+    bottom: 20px;
+    right: 20px;
+  }
+  
+  /* Ocultar el texto en móviles, mostrar solo el ícono */
+  .floating-chat-btn::before {
+    content: '💬';
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+  }
+  
+  /* Ocultar el contenido original del botón en móviles */
+  .floating-chat-btn > *:not(.notification-badge) {
+    display: none;
+  }
+  
+  /* Asegurar que el badge de notificación sea visible */
+  .notification-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #ff4d4f;
+    color: white;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+    border: 2px solid white;
+  }
 }
 
 @keyframes bounceIn {
